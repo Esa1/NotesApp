@@ -8,17 +8,11 @@ import {nanoid} from "nanoid"
 export default function App() {
     /**
      * Challenge:
-     * 1. Every time the `notes` array changes, save it 
-     *    in localStorage. You'll need to use JSON.stringify()
-     *    to turn the array into a string to save in localStorage.
-     * 2. When the app first loads, initialize the notes state
-     *    with the notes saved in localStorage. You'll need to
-     *    use JSON.parse() to turn the stringified array back
-     *    into a real JS array.
+     * Lazily initialize our `notes` state so it doesn't
+     * reach into localStorage on every single re-render
+     * of the App component
      */
-    
-    //if localStorage.getItem cannot load it returns null
-    const [notes, setNotes] = React.useState(
+    const [notes, setNotes] = React.useState(() =>
         JSON.parse(localStorage.getItem("notes")) || []
     )
     const [currentNoteId, setCurrentNoteId] = React.useState(
