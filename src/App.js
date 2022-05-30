@@ -17,42 +17,18 @@ export default function App() {
      *    into a real JS array.
      */
     
-    const [notes, setNotes] = React.useState(loadLocalStorage())
+    //if localStorage.getItem cannot load it returns null
+    const [notes, setNotes] = React.useState(
+        JSON.parse(localStorage.getItem("notes")) || []
+    )
     const [currentNoteId, setCurrentNoteId] = React.useState(
         (notes[0] && notes[0].id) || ""
     )
-
-    const testNotes = loadLocalStorage()
     
-    console.log("testNotes=" + testNotes)
-    console.log("NOTES_START= " + notes)
-    function saveLocalStorage() {
-        console.log("saveLocalStorage")
-        if (notes.length > 0) {
-            console.log("notes.lenth > 0: " + notes.length)
-            console.log(notes)
-            const notesStr = JSON.stringify(notes)
-            localStorage.setItem('NotesList', notesStr)
-        }
-        else
-            console.log("notes.lenth == 0")
-    }
-
-    function loadLocalStorage() {
-        console.log("loadLocalStorage")
-        const localNotes = localStorage.getItem('NotesList')
-        console.log("localNotes= " + localNotes)
-        const localNotesArray = JSON.parse(localNotes)
-        console.log("localNotesArray length= " + localNotesArray.length)
-        console.log(localNotesArray[0])
-        return localNotesArray
-    }
-
-    useEffect(() => {
-        console.log("useEffect fired")
-        saveLocalStorage()
+    React.useEffect(() => {
+        localStorage.setItem("notes", JSON.stringify(notes))
     }, [notes])
-
+    
     function createNewNote() {
         const newNote = {
             id: nanoid(),
