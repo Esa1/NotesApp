@@ -7,13 +7,11 @@ import {nanoid} from "nanoid"
 
 export default function App() {
     /**
-     * Challenge:
-     * Lazily initialize our `notes` state so it doesn't
-     * reach into localStorage on every single re-render
-     * of the App component
+     * Challenge: When the user edits a note, reposition
+     * it in the list of notes to the top of the list
      */
-    const [notes, setNotes] = React.useState(() =>
-        JSON.parse(localStorage.getItem("notes")) || []
+    const [notes, setNotes] = React.useState(
+        () => JSON.parse(localStorage.getItem("notes")) || []
     )
     const [currentNoteId, setCurrentNoteId] = React.useState(
         (notes[0] && notes[0].id) || ""
@@ -24,6 +22,7 @@ export default function App() {
     }, [notes])
     
     function createNewNote() {
+        console.log("createNewNote")
         const newNote = {
             id: nanoid(),
             body: "# Type your markdown note's title here"
@@ -33,11 +32,60 @@ export default function App() {
     }
     
     function updateNote(text) {
-        setNotes(oldNotes => oldNotes.map(oldNote => {
+        console.log("***UPDATENOTE---")
+        function currentNoteTest(note) {
+            if (currentNoteId == note.id)
+                return true
+            else
+                return false
+        }
+
+/*        setNotes(oldNotes => oldNotes.map(oldNote => {
             return oldNote.id === currentNoteId
                 ? { ...oldNote, body: text }
                 : oldNote
-        }))
+        }))*/
+
+        setNotes(oldNotes => {
+            const updatedNotes = oldNotes.map(oldNote => {
+            return oldNote.id === currentNoteId
+                ? { ...oldNote, body: text }
+                : oldNote
+            })
+            let orderChanged = []
+            const id = updatedNotes.findIndex(currentNoteTest)
+            if (id > 0) {
+                const startPart = updatedNotes.slice(0, id)
+                const updated = updatedNotes.slice(id, id+1)
+                const endPart = updatedNotes.slice(id+1)
+                orderChanged = [
+                    ...updated,
+                    ...startPart,
+                    ...endPart
+                ]
+                return orderChanged
+            }
+            else
+                return updatedNotes
+        })
+
+/*        const id = notes.findIndex(currentNoteTest)
+        console.log("ID===" + id)
+        if (id > 0) {
+            const startPart = notes.slice(0, id)
+            const updated = notes.slice(id, id+1)
+            const endPart = notes.slice(id+1)
+            console.log("startPart= " + startPart)
+            console.log("startPart0= " + startPart[0].body)
+            console.log("updated= " + updated)
+            console.log("endPart= " + endPart)
+            setNotes(prevNotes => [
+                ...updated,
+                ...startPart,
+                ...endPart
+            ])
+        }*/
+        console.log("---UPDATENOTE***")
     }
     
     function findCurrentNote() {

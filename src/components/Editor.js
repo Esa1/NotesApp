@@ -4,8 +4,6 @@ import Showdown from "showdown"
 
 export default function Editor({ currentNote, updateNote }) {
     const [selectedTab, setSelectedTab] = React.useState("write")
-    console.log("Editor")
-    console.log(currentNote)
 
     const converter = new Showdown.Converter({
         tables: true,
