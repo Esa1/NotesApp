@@ -32,60 +32,26 @@ export default function App() {
     }
     
     function updateNote(text) {
-        console.log("***UPDATENOTE---")
-        function currentNoteTest(note) {
-            if (currentNoteId == note.id)
-                return true
-            else
-                return false
-        }
-
-/*        setNotes(oldNotes => oldNotes.map(oldNote => {
-            return oldNote.id === currentNoteId
-                ? { ...oldNote, body: text }
-                : oldNote
-        }))*/
-
+        // Try to rearrange the most recently-modified
+        // not to be at the top
         setNotes(oldNotes => {
-            const updatedNotes = oldNotes.map(oldNote => {
-            return oldNote.id === currentNoteId
-                ? { ...oldNote, body: text }
-                : oldNote
-            })
-            let orderChanged = []
-            const id = updatedNotes.findIndex(currentNoteTest)
-            if (id > 0) {
-                const startPart = updatedNotes.slice(0, id)
-                const updated = updatedNotes.slice(id, id+1)
-                const endPart = updatedNotes.slice(id+1)
-                orderChanged = [
-                    ...updated,
-                    ...startPart,
-                    ...endPart
-                ]
-                return orderChanged
-            }
-            else
-                return updatedNotes
+            // Create a new empty array
+            // Loop over the original array
+                // if the id matches
+                    // put the updated note at the 
+                    // beginning of the new array
+                // else
+                    // push the old note to the end
+                    // of the new array
+            // return the new array
         })
-
-/*        const id = notes.findIndex(currentNoteTest)
-        console.log("ID===" + id)
-        if (id > 0) {
-            const startPart = notes.slice(0, id)
-            const updated = notes.slice(id, id+1)
-            const endPart = notes.slice(id+1)
-            console.log("startPart= " + startPart)
-            console.log("startPart0= " + startPart[0].body)
-            console.log("updated= " + updated)
-            console.log("endPart= " + endPart)
-            setNotes(prevNotes => [
-                ...updated,
-                ...startPart,
-                ...endPart
-            ])
-        }*/
-        console.log("---UPDATENOTE***")
+        
+        // This does not rearrange the notes
+        // setNotes(oldNotes => oldNotes.map(oldNote => {
+        //     return oldNote.id === currentNoteId
+        //         ? { ...oldNote, body: text }
+        //         : oldNote
+        // }))
     }
     
     function findCurrentNote() {
